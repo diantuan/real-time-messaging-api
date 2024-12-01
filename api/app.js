@@ -153,6 +153,8 @@ app.post('/api/v1/addfriend', verify, async (req,res)=>{
 
   const {friendEmail} = req.body;
 
+  const io = req.app.get('io')
+
   if(!friendEmail){
     return res.status(400).json({error:"email is required for the person u wanna add --diane"})
   }
@@ -174,6 +176,7 @@ app.post('/api/v1/addfriend', verify, async (req,res)=>{
     })
 
     await newFriend.save()
+    io.emit('refreshFriends')
     return res.status(200).json(newFriend)
     
   }
@@ -185,7 +188,7 @@ app.post('/api/v1/addfriend', verify, async (req,res)=>{
 
 app.get('/api/v1/friendlist', verify, async(req,res)=>{
   const userId = req.user.uid;
-  
+
 
   try{
 
@@ -212,7 +215,6 @@ app.get('/api/v1/friendlist', verify, async(req,res)=>{
       friendlist.map((entry)=> entry.populate('friendId'))
     )
 
-    
 
     return res.status(200).json(friendlist)
     

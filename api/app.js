@@ -255,7 +255,7 @@ app.get('/api/v1/get-channel/', verify, async (req,res)=>{
   const userId = req.user.uid
 
   try{
-    const channel = await ChannelModel.find({members: [{userId}]}).populate('memberId')
+    const channel = await ChannelModel.find({members: [{userId}]})
     return res.status(200).json(channel)
   }
   catch(error){

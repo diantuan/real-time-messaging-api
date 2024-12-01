@@ -10,9 +10,13 @@ app.set('io', io)
 
 io.on('connection', (socket)=>{
 
-  socket.on('disconnect')
+  socket.on('disconnect', ()=>{
+    console.log('socket disconnected')
+  })
 })
 
-module.exports = (req,res)=>{
-  app(req,res)
-}
+const PORT = process.env.PORT || 3000
+
+server.listen(PORT, ()=>{
+  console.log("server started")
+})

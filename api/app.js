@@ -249,6 +249,19 @@ app.post('/api/v1/create-channel', verify, async (req,res)=>{
   }
 })
 
+app.get('/api/v1/get-channel/:channelid', verify, async (req,res)=>{
+
+  const {channelid} = req.params
+
+  try{
+    const channel = await ChannelModel.findById(channelid).populate('memberId')
+    return res.status(200).json(channel)
+  }
+  catch(error){
+    return res.status(500).json({error:'cant find channel', message: error})
+  }
+})
+
 app.post('/api/v1/add-channel/', verify, async(req,res)=>{
 
 

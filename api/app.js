@@ -245,7 +245,7 @@ app.post('/api/v1/create-channel', verify, async (req,res)=>{
 
   }
   catch(error){
-    return res.status(500).json({error:"can't create channel"})
+    return res.status(500).json({error:"can't create channel", message:error})
   }
 })
 

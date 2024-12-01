@@ -11,7 +11,7 @@ const newSchema = new mongoose.Schema(
       type:Date,
       default:Date.now()
     },
-    members:[{memberName:{
+    members:[{memberId:{
       type: mongoose.Schema.Types.ObjectId,
       ref: SignUpModel
     }}]

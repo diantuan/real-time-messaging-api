@@ -237,7 +237,7 @@ app.post('/api/v1/create-channel', verify, async (req,res)=>{
   const userId = req.user.uid
   
   const newChannel = new ChannelModel({
-    channelName, members:[...members, {userId}]
+    channelName, members:[...members, {memberId: userId}]
   })
 
   try{

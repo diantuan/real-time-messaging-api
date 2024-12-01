@@ -234,9 +234,10 @@ app.get('/api/v1/friendlist', verify, async(req,res)=>{
 app.post('/api/v1/create-channel', verify, async (req,res)=>{
   const{channelName, members} = req.body
 
+  const userId = req.user.uid
   
   const newChannel = new ChannelModel({
-    channelName, members
+    channelName, members:[...members, {userId}]
   })
 
   try{
@@ -249,12 +250,12 @@ app.post('/api/v1/create-channel', verify, async (req,res)=>{
   }
 })
 
-app.get('/api/v1/get-channel/:channelid', verify, async (req,res)=>{
+app.get('/api/v1/get-channel/', verify, async (req,res)=>{
 
-  const {channelid} = req.params
+  const userId = req.user.uid
 
   try{
-    const channel = await ChannelModel.findById(channelid).populate('memberId')
+    const channel = await ChannelModel.find({members: [{userId}]}).populate('memberId')
     return res.status(200).json(channel)
   }
   catch(error){
@@ -266,6 +267,8 @@ app.post('/api/v1/add-channel/', verify, async(req,res)=>{
 
 
   const {channelid, member} = req.body
+
+  
 
   try{
     const channel = await ChannelModel.findByIdAndUpdate(

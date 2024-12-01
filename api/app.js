@@ -7,7 +7,8 @@ const MessagesModel = require('../models/messages-model.js');
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
 const verify = require('../verify-middleware.js')
-const FriendModel = require('../models/friends-model.js')
+const FriendModel = require('../models/friends-model.js');
+const ChannelModel = require('../models/channel-model.js');
 
 const secretKey = 'balahurahaha'
 
@@ -228,6 +229,44 @@ app.get('/api/v1/friendlist', verify, async(req,res)=>{
   
 }
 )
+
+
+app.post('/api/v1/create-channel', verify, async (req,res)=>{
+  const{channelName, members} = req.body
+
+  
+  const newChannel = new ChannelModel({
+    channelName, members
+  })
+
+  try{
+    await newChannel.save()
+    return res.status(200).json(newChannel)
+
+  }
+  catch(error){
+    return res.status(500).json({error:"can't create channel"})
+  }
+})
+
+app.post('/api/v1/add-channel/', verify, async(req,res)=>{
+
+
+  const {channelid, member} = req.body
+
+  try{
+    const channel = await ChannelModel.findByIdAndUpdate(
+      channelid,{
+        $addToSet : {members: member},
+        new: true
+      }
+    )
+    return res.status(200).json(channel)
+  }
+  catch(error){
+    return res.status(500).json({error:"cannot add member", message: error})
+  }
+})
 
 
 

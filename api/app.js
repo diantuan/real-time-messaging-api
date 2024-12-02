@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken')
 const verify = require('../verify-middleware.js')
 const FriendModel = require('../models/friends-model.js');
 const ChannelModel = require('../models/channel-model.js');
+const ChannelMessagesModel = require('../models/channel-messages-model.js')
 
 const secretKey = 'balahurahaha'
 
@@ -101,7 +102,7 @@ app.post('/api/v1/auth/sign_in/', async (req,res)=>{
 
 
 app.post('/api/v1/messages', verify, async (req,res)=>{
-  const {receiver, body} = req.body;
+  const {receiver, body, receiver_class} = req.body;
   
   const io = req.app.get('io');
 
@@ -110,6 +111,21 @@ app.post('/api/v1/messages', verify, async (req,res)=>{
   }
 
   const sender = req.user.uid
+
+  if(receiver_class === "channel"){
+    const newChannelMessage = new ChannelMessagesModel({
+      sender, receiver, body
+    })
+    try{
+      await newChannelMessage.save()
+      io.emit('refresh')
+      return res.status(200).json(newChannelMessage)
+    }
+    catch(error){
+      return res.status(500).json({error:"cannot send message", message:error})
+    }
+  }
+  
 
   const newMessage = new MessagesModel(
     {sender, receiver,body}
@@ -124,14 +140,24 @@ app.post('/api/v1/messages', verify, async (req,res)=>{
   }
 })
 
-app.get('/api/v1/messages/:receiverid', verify, async (req,res)=>{
-  const {receiverid} = req.params;
+app.get('/api/v1/messages/:channel/:receiverid', verify, async (req,res)=>{
+  const {channel, receiverid} = req.params;
 
-  if(!receiverid ){
+  if(!receiverid && !channel){
     return res.status(400).json({error: "ObjectID is required for receiver --diane"})
   }
 
   const senderid = req.user.uid
+
+  if(channel === "channel"){
+    try{
+      const channelHistory = await ChannelMessagesModel.find({receiver:receiverid}).populate('sender receiver')
+      return res.status(200).json(channelHistory)
+    }
+    catch(error){
+      return res.status(500).json({error:"cannot find channel", message: error})
+    }
+  }
 
   try{
 

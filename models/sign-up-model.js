@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs')
 
-const emailRegex = /^[a-zA-Z0-9_\-^\s]+@[a-zA-Z0-9_\-^\s]+\.\w+$/;
+const emailRegex = /^[a-zA-Z0-9_\-^\s]+@[a-zA-Z0-9_\-^\s]+(\.\w+)+$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W]).{8,}$/
 
 const signUpSchema = new mongoose.Schema(

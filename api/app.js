@@ -293,16 +293,17 @@ app.get('/api/v1/get-channel/', verify, async (req,res)=>{
 app.post('/api/v1/add-channel/', verify, async(req,res)=>{
 
 
-  const {channelid, member} = req.body
+  const {channelid, memberId} = req.body
 
-  
+  if(!channelid || !memberId){
+    return res.status(400).json({error:"channel id and member id are required"})
+  }
 
   try{
     const channel = await ChannelModel.findByIdAndUpdate(
-      channelid,{
-        $addToSet : {members: member},
-        new: true
-      }
+      channelid,
+      {$addToSet : {members: {memberId}}},
+      {new: true}
     )
     return res.status(200).json(channel)
   }

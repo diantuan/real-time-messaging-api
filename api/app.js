@@ -270,8 +270,9 @@ app.post('/api/v1/create-channel', verify, async (req,res)=>{
 
   try{
     await newChannel.save()
-    return res.status(200).json(newChannel)
     io.emit('refreshChannel')
+    return res.status(200).json(newChannel)
+   
 
   }
   catch(error){

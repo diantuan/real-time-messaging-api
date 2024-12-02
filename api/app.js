@@ -86,7 +86,7 @@ app.post('/api/v1/auth/sign_in/', async (req,res)=>{
     )
 
     if(isMatch){
-      res.status(200).json(token)
+      res.status(200).json({token:token, uid:user._id})
     }else{
       res.status(400).json({error:'password is incorrect'})
     }
@@ -151,7 +151,7 @@ app.get('/api/v1/messages/:channel/:receiverid', verify, async (req,res)=>{
 
   if(channel === "channel"){
     try{
-      const channelHistory = await ChannelMessagesModel.find({receiver:receiverid}).populate('sender receiver')
+      const channelHistory = await ChannelMessagesModel.find({receiver:receiverid}).sort({createdAt: 1}).populate('sender receiver')
       return res.status(200).json(channelHistory)
     }
     catch(error){

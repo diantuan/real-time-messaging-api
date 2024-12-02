@@ -261,6 +261,8 @@ app.post('/api/v1/create-channel', verify, async (req,res)=>{
   const{channelName, members} = req.body
 
   const userId = req.user.uid
+
+  const io = req.app.get('io')
   
   const newChannel = new ChannelModel({
     channelName, members:[...members, {memberId: userId}]
@@ -269,6 +271,7 @@ app.post('/api/v1/create-channel', verify, async (req,res)=>{
   try{
     await newChannel.save()
     return res.status(200).json(newChannel)
+    io.emit('refreshChannel')
 
   }
   catch(error){

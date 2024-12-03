@@ -296,7 +296,7 @@ app.get('/api/v1/get-channel/', verify, async (req,res)=>{
 
 app.post('/api/v1/add-channel/', verify, async(req,res)=>{
 
-
+  const io = req.app.get('io')
   const {channelid, memberId} = req.body
 
   if(!channelid || !memberId){
@@ -309,6 +309,7 @@ app.post('/api/v1/add-channel/', verify, async(req,res)=>{
       {$addToSet : {members: {memberId}}},
       {new: true}
     )
+    io.emit('refreshChannel')
     return res.status(200).json(channel)
   }
   catch(error){

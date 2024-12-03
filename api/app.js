@@ -305,7 +305,7 @@ app.post('/api/v1/add-channel/', verify, async(req,res)=>{
 
   try{
 
-    const match = await ChannelModel.findOne({"members.memberId" : member1})
+    const match = await ChannelModel.findOne({"members.memberId" : memberId})
 
     if(match){
       return res.status(400).json({error:"friend is already in the channel"})

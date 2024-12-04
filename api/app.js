@@ -33,7 +33,7 @@ app.get("/", (req,res)=>{
 
 app.post('/api/v1/auth/', async (req,res)=>{
 
-  const {email, password, password_confirmation} = req.body;
+  const {email, nickname, password, password_confirmation} = req.body;
 
   const existingEmail = await SignUpModel.findOne({email});
 
@@ -46,7 +46,7 @@ app.post('/api/v1/auth/', async (req,res)=>{
   }
 
   const newSignUp = new SignUpModel(
-    {email, password, password_confirmation}
+    {email, nickname, password, password_confirmation}
   )
 
   

@@ -307,8 +307,8 @@ app.post('/api/v1/add-channel/', verify, async(req,res)=>{
 
     const match = await ChannelModel.findOne({
       $and:[
-        {"members.memberId" : memberId},
-        {channelId: channelid}
+        {_id: channelid},
+        {"members.memberId" : memberId}
       ]})
 
     if(match){

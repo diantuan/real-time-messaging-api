@@ -1,4 +1,4 @@
-const multer = rquire('multer')
+const multer = require('multer')
 
 const storage = multer.memoryStorage()
 

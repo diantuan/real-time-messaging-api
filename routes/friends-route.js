@@ -67,7 +67,13 @@ router.get('/api/v1/friendlist', verify, async(req,res)=>{
     })
 
     await Promise.all(
-      friendlist.map((entry)=> entry.populate('friendId'))
+      friendlist.map((entry)=>{
+        return entry.populate('friendId')
+      } )
+    )
+    friendlist.forEach(friend=>{
+      friend.friendId.picture = friend.friendId.picture.toString('base64')
+    }
     )
 
 

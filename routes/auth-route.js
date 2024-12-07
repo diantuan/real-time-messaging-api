@@ -4,10 +4,12 @@ const SignUpModel = require('../models/sign-up-model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const secretKey = 'balahurahaha'
+const upload = require('../upload-middleware')
 
-router.post('/api/v1/auth/', async (req,res)=>{
+router.post('/api/v1/auth/', upload.single('picture'), async (req,res)=>{
 
   const {email, nickname, password, password_confirmation} = req.body;
+  const {buffer, mimetype} = req.file
 
   const existingEmail = await SignUpModel.findOne({email});
 
@@ -20,7 +22,9 @@ router.post('/api/v1/auth/', async (req,res)=>{
   }
 
   const newSignUp = new SignUpModel(
-    {email, nickname, password, password_confirmation}
+    {email, nickname, password, password_confirmation, 
+    picture: buffer,  
+    picture_type:mimetype}
   )
 
   

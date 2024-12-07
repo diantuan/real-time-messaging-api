@@ -25,6 +25,15 @@ const signUpSchema = new mongoose.Schema(
   nickname:{
     type:String,
     required:false
+  },
+
+  picture:{
+    type:Buffer,
+    required:false
+  },
+  picture_type:{
+    type:String,
+    required:false
   }
 }
 )

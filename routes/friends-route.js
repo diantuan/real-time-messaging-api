@@ -71,10 +71,6 @@ router.get('/api/v1/friendlist', verify, async(req,res)=>{
         return entry.populate('friendId')
       } )
     )
-    friendlist.forEach(friend=>{
-      friend.friendId.picture = friend.friendId.picture.toString('base64')
-    }
-    )
 
 
     return res.status(200).json(friendlist)

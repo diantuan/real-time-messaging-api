@@ -71,13 +71,16 @@ router.post('/api/v1/addfriend', verify, async (req,res)=>{
           return entry.populate('friendId')
         } )
       )
-      friendlist.forEach(friend=>{
+
+      const newFriendlist = friendlist.map(friend=>{
         friend.friendId.picture = friend.friendId.picture ? `data:${friend.friendId.picture_type};base64,${friend.friendId.picture.toString('base64')}` : null
-      }
-      )
+
+        return friend
+      })
+     
 
 
-      return res.status(200).json(friendlist)
+      return res.status(200).json(newFriendlist)
       
     }
 

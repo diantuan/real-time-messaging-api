@@ -41,53 +41,53 @@ router.post('/api/v1/addfriend', verify, async (req,res)=>{
 
 })
 
-router.get('/api/v1/friendlist', verify, async(req,res)=>{
-  const userId = req.user.uid;
+  router.get('/api/v1/friendlist', verify, async(req,res)=>{
+    const userId = req.user.uid;
 
 
-  try{
+    try{
 
-    const friendlist = await FriendModel.find({
-      $or:
-        [
-          {userId:userId},
-          {friendId:userId}
-        ]
+      const friendlist = await FriendModel.find({
+        $or:
+          [
+            {userId:userId},
+            {friendId:userId}
+          ]
+        
+      }).sort({addedAt:1})
       
-    }).sort({addedAt:1})
-    
 
-    friendlist.forEach(entry=>{
+      friendlist.forEach(entry=>{
 
-      if(entry.friendId.toString() === userId){
-        const savedUserId = entry.userId
-        entry.userId = userId
-        entry.friendId = savedUserId;
+        if(entry.friendId.toString() === userId){
+          const savedUserId = entry.userId
+          entry.userId = userId
+          entry.friendId = savedUserId;
+        }
+      })
+
+      await Promise.all(
+        friendlist.map((entry)=>{
+          return entry.populate('friendId')
+        } )
+      )
+      friendlist.forEach(friend=>{
+        friend.friendId.picture = friend.friendId.picture ? `data:${friend.friendId.picture_type};base64, ${friend.friendId.picture.toString('base64')}` : null
       }
-    })
+      )
 
-    await Promise.all(
-      friendlist.map((entry)=>{
-        return entry.populate('friendId')
-      } )
-    )
-    friendlist.forEach(friend=>{
-      friend.friendId.picture = friend.friendId.picture ? friend.friendId.picture.toString('base64') : null
+
+      return res.status(200).json(friendlist)
+      
     }
-    )
 
 
-    return res.status(200).json(friendlist)
+    catch(error){
+      return res.status(500).json({error:"cannot find friend list --diane", message:error})
+
+    }
     
   }
-
-
-  catch(error){
-    return res.status(500).json({error:"cannot find friend list --diane", message:error})
-
-  }
-  
-}
-)
+  )
 
 module.exports = router

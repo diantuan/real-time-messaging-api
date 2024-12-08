@@ -74,7 +74,7 @@ router.post('/api/v1/addfriend', verify, async (req,res)=>{
 
     
 
-      return res.status(200).json({data:"kiki"})
+      return res.status(200).json(friendlist)
       
     }
 

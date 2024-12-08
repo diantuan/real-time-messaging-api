@@ -72,17 +72,9 @@ router.post('/api/v1/addfriend', verify, async (req,res)=>{
         } )
       )
 
-      const newFriendlist = friendlist.map(friend=>{
-        const friendData = friend.friendId.toObject()
-        friend.friendId.picture = friend.friendId.picture ? `data:${friendData.picture_type};base64,${friendData.picture.toString('base64')}` : null
+    
 
-        return friend
-      })
-      
-      console.log(newFriendlist)
-
-
-      return res.status(200).json(newFriendlist)
+      return res.status(200).json(friendlist)
       
     }
 

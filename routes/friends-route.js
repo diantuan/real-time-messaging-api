@@ -72,7 +72,7 @@ router.post('/api/v1/addfriend', verify, async (req,res)=>{
         } )
       )
       friendlist.forEach(friend=>{
-        friend.friendId.picture = friend.friendId.picture ? `data:${friend.friendId.picture_type};base64, ${friend.friendId.picture.toString('base64')}` : null
+        friend.friendId.picture = friend.friendId.picture ? `data:${friend.friendId.picture_type};base64,${friend.friendId.picture.toString('base64')}` : null
       }
       )
 

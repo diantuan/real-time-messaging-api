@@ -77,7 +77,8 @@ router.post('/api/v1/addfriend', verify, async (req,res)=>{
 
         return friend
       })
-     
+      
+      console.log(newFriendlist)
 
 
       return res.status(200).json(newFriendlist)

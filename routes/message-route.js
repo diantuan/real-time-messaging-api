@@ -25,7 +25,8 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
         _id:sender
       },
       receiver,
-      body
+      body,
+      _id: Date.now()
     }
     try{
       io.emit('refresh', chanMes)

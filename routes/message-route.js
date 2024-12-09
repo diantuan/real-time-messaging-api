@@ -35,7 +35,7 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
   )
   try{
     await newMessage.save();
-    io.emit('refresh')
+    io.emit('refresh', newMessage)
     return res.status(201).json(newMessage);
   }
   catch(error){

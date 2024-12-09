@@ -20,17 +20,11 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
       sender, receiver, body
     })
     
-    const chanMes = {
-      sender:{
-        _id:sender
-      },
-      receiver,
-      body,
-      _id: Date.now()
-    }
+  
     try{
-      io.emit('refresh', chanMes)
+      
       await newChannelMessage.save()
+      io.emit('refresh', newChannelMessage)
       return res.status(200).json(newChannelMessage)
     }
     catch(error){

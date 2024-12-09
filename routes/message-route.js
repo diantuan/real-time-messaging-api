@@ -20,8 +20,8 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
       sender, receiver, body
     })
     try{
-      await newChannelMessage.save()
       io.emit('refresh', newChannelMessage)
+      await newChannelMessage.save()
       return res.status(200).json(newChannelMessage)
     }
     catch(error){
@@ -34,8 +34,8 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
     {sender, receiver,body}
   )
   try{
-    await newMessage.save();
     io.emit('refresh', newMessage)
+    await newMessage.save()
     return res.status(201).json(newMessage);
   }
   catch(error){

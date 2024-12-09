@@ -19,8 +19,16 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
     const newChannelMessage = new ChannelMessagesModel({
       sender, receiver, body
     })
+    
+    const chanMes = {
+      sender:{
+        _id:sender
+      },
+      receiver,
+      body
+    }
     try{
-      io.emit('refresh', newChannelMessage)
+      io.emit('refresh', chanMes)
       await newChannelMessage.save()
       return res.status(200).json(newChannelMessage)
     }
@@ -33,8 +41,15 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
   const newMessage = new MessagesModel(
     {sender, receiver,body}
   )
+  const mes = {
+    sender:{
+      _id:sender
+    },
+    receiver,
+    body
+  }
   try{
-    io.emit('refresh', newMessage)
+    io.emit('refresh', mes)
     await newMessage.save()
     return res.status(201).json(newMessage);
   }

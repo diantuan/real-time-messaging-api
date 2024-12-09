@@ -24,7 +24,7 @@ router.post('/api/v1/messages', verify, async (req,res)=>{
     try{
       
       await newChannelMessage.save()
-      const foundt = ChannelMessagesModel.findOne({sender:sender, receiver:receiver, body:body}).populate('sender')
+      const foundt = await ChannelMessagesModel.findOne({sender:sender, receiver:receiver, body:body}).populate('sender')
       
       io.emit('refresh', foundt)
       return res.status(200).json(newChannelMessage)
